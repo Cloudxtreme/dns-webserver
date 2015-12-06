@@ -60,7 +60,7 @@ public class WebServer1 {
 	private static ServerSocket serverSocket;
 	
 	public static void main(String[] args) throws IOException {
-		serverSocket=new ServerSocket(8080);  // Start, listen on port 80
+		serverSocket=new ServerSocket(53);  // Start, listen on port 80
 		while (true) {
 			try {
 				Socket s=serverSocket.accept();  // Wait for a client to connect
@@ -76,7 +76,6 @@ public class WebServer1 {
 // A ClientHandler reads an HTTP request and responds
 class ClientHandler extends Thread {
 	
-	private String root = "web/%s";	
 	private Socket socket;  // The accepted socket from the Webserver
 
 	// Start the thread in the constructor
@@ -109,7 +108,7 @@ class ClientHandler extends Thread {
 
 				// Parse the filename from the GET command
 				if (st.hasMoreElements() && st.nextToken().equalsIgnoreCase("GET") && st.hasMoreElements()) {
-					filename=String.format(root, st.nextToken());
+					filename=st.nextToken();
 				} else {
 					throw new FileNotFoundException();  // Bad request
 				}
@@ -118,6 +117,7 @@ class ClientHandler extends Thread {
 				if (filename.endsWith("/")) {
 					filename+="index.html";
 				}
+				System.out.println(filename);
 
 				// Remove leading / from filename
 				while (filename.indexOf("/")==0) {
